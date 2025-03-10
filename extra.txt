@@ -1,0 +1,40 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rental Details</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script>
+        function calculateTotal() {
+            const rent = parseFloat(document.getElementById("rent").value || 0);
+            const quantity = parseInt(document.getElementById("quantity_issued").value || 0);
+            const advance = parseFloat(document.getElementById("advance").value || 0);
+            const totalRent = rent * quantity;
+            const balance = totalRent - advance;
+
+            document.getElementById("total_rent").value = totalRent.toFixed(2);
+            document.getElementById("balance").value = balance.toFixed(2);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Rental Details</h2>
+        <p><strong>User:</strong> {{ user.name }}</p>
+        <p><strong>Phone:</strong> {{ user.phone_number }}</p>
+
+        <form method="POST">
+            <input type="text" name="item_id" id="item_id" placeholder="Item ID" required />
+            <input type="number" name="quantity_issued" id="quantity_issued" placeholder="Quantity" oninput="calculateTotal()" required />
+            <input type="date" name="date_of_booking" id="date_of_booking" placeholder="Date of Booking" required />
+            <input type="date" name="due_date" id="due_date" placeholder="Due Date" required />
+            <input type="number" step="0.01" name="rent" id="rent" placeholder="Rent per Item" oninput="calculateTotal()" required />
+            <input type="number" step="0.01" name="advance" id="advance" placeholder="Advance" oninput="calculateTotal()" required />
+            <input type="text" id="total_rent" placeholder="Total Rent" readonly />
+            <input type="text" id="balance" placeholder="Balance" readonly />
+            <button type="submit">Submit Rental</button>
+        </form>
+    </div>
+</body>
+</html> -->

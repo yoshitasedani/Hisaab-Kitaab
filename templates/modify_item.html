@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modify Item</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        .cen{
+            justify-content: center;
+            align-content: center;
+            display: flex;
+        }
+        
+        h2 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+        .input {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <form method="POST" action="/modify_item/{{ item.item_id }}">
+        <input type="text" name="description" value="{{ item.description }}" required />
+        <select name="category" required>
+            <option value="Single" {% if item.category == "Single" %}selected{% endif %}>Single</option>
+            <option value="Group" {% if item.category == "Group" %}selected{% endif %}>Group</option>
+            <option value="Couple" {% if item.category == "Couple" %}selected{% endif %}>Couple</option>
+        </select>
+        <input type="number" name="rent" value="{{ item.rent }}" required />
+        <input type="number" name="quantity" value="{{ item.quantity }}" required />
+        <button type="submit">Update Item</button>
+    </form>
+    
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accounting Software</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #042c06;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Sankalp Garba Dresses</h1>
+        <div class="buttons">
+            <button class="button" onclick="location.href='/items'">Items</button>
+            <button class="button" onclick="location.href='/rent'">Rent</button>
+            <button class="button" onclick="location.href='/return'">Return</button>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Summary</title>
+</head>
+<body>
+    <h2>Billing Summary for User ID: {{ rentals[0].user_id }}</h2>
+    <table border="1">
+        <tr>
+            <th>Item ID</th>
+            <th>Quantity</th>
+            <th>Date of Issuing</th>
+            <th>Due Date</th>
+            <th>Rent per Day</th>
+            <th>Total Rent</th>
+        </tr>
+        {% for rental in rentals %}
+        <tr>
+            <td>{{ rental.item_id }}</td>
+            <td>{{ rental.quantity_issued }}</td>
+            <td>{{ rental.date_of_issuing }}</td>
+            <td>{{ rental.due_date }}</td>
+            <td>{{ rental.rent }}</td>
+            <td>{{ rental.total_rent }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h3>Total Rent: {{ total_rent }}</h3>
+
+    <form action="/generate_bill" method="POST">
+        <label for="advance">Advance Payment:</label>
+        <input type="number" id="advance" name="advance" required>
+        <button type="submit">Generate Bill</button>
+    </form>
+</body>
+</html>

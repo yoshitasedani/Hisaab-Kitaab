@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rent - Select User</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script>
+        function fetchUsers(query) {
+            const dropdown = document.getElementById("user-dropdown");
+            dropdown.innerHTML = "";
+            fetch(`/search_user?query=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.users.length > 0) {
+                        data.users.forEach(user => {
+                            const option = document.createElement("option");
+                            option.value = user.name;
+                            option.textContent = `${user.name} (${user.phone_number})`;
+                            dropdown.appendChild(option);
+                        });
+                    }
+                    const addOption = document.createElement("option");
+                    addOption.value = "add_user";
+                    addOption.textContent = "Add User";
+                    dropdown.appendChild(addOption);
+                });
+        }
+
+        function handleUserSelection(event) {
+            const selectedUser = event.target.value;
+            if (selectedUser === "add_user") {
+                window.location.href = "/add_user";
+            } else {
+                document.getElementById("selected-user-form").submit();
+            }
+        }
+    </script> 
+</head>
+<body>
+    <div class="container">
+        <h2>Select User</h2>
+        <form id="selected-user-form" action="/select_user" method="POST">
+            <input type="text" name="query" id="user-search" placeholder="Enter user name..." oninput="fetchUsers(this.value)" required>
+            <select id="user-dropdown" name="user" onchange="handleUserSelection(event)">
+            </select>
+            <button type="submit">Next</button>
+        </form>
+    </div>
+</body>
+
+
+
+
+</html>
+

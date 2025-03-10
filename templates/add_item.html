@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+        .input {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Item</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Add New Item</h2>
+        {% if error %}
+            <p style="color: red;">{{ error }}</p>
+        {% endif %}
+        <form method="POST" action="/add_item">
+            <input type="text" name="item_id" placeholder="Item ID" required class="input"/>
+            <br>
+            <input type="text" name="description" placeholder="Description" required class="input"/>
+            <br>
+            <select name="category" required class="input">
+                <option value="" disabled selected>Select Category</option>
+                <option value="Single">Single</option>
+                <option value="Couple">Couple</option>
+                <option value="Group">Group</option>
+            </select>
+            <br>
+            <input type="number" name="rent" placeholder="Rent" required class="input"/>
+            <br>
+            <input type="number" name="quantity" placeholder="Quantity" required class="input"/>
+            <br>
+            <button type="submit">Add Item</button>
+        </form>
+    </div>
+</body>
+</html>

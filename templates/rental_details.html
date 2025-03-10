@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rental Details</title>
+    <script>
+        let selectedItems = [];
+
+        // Fetch the maximum quantity for the entered item ID
+        function fetchMaxQuantity() {
+            const itemId = document.getElementById("item_id").value.trim();
+            if (!itemId) {
+                document.getElementById("quantity").placeholder = "Enter Quantity";
+                return;
+            }
+
+            fetch(`/get_item_details?item_id=${itemId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById("quantity").placeholder = `Max: ${data.max_quantity}`;
+                        document.getElementById("item-details").textContent = `Item: ${data.name}`;
+                    } else {
+                        document.getElementById("quantity").placeholder = "Item not found";
+                        document.getElementById("item-details").textContent = "";
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching item details:", error);
+                    document.getElementById("quantity").placeholder = "Error fetching details";
+                });
+        }
+
+        // Add an item to the selected items table
+        function addItem() {
+            const itemId = document.getElementById("item_id").value.trim();
+            const quantity = document.getElementById("quantity").value.trim();
+            const dateOfIssuing = document.getElementById("date_of_issuing").value;
+            const numberOfDays = document.getElementById("number_of_days").value;
+
+            if (!itemId || !quantity || !dateOfIssuing || !numberOfDays) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            const table = document.getElementById("items-table");
+            const row = table.insertRow();
+            const returnDate = calculateReturnDate(dateOfIssuing, numberOfDays);
+
+            row.innerHTML = `
+                <td>${itemId}</td>
+                <td>${quantity}</td>
+                <td>${dateOfIssuing}</td>
+                <td>${numberOfDays}</td>
+                <td>${returnDate}</td>
+            `;
+
+            selectedItems.push({
+                item_id: itemId,
+                quantity: quantity,
+                date_of_issuing: dateOfIssuing,
+                number_of_days: numberOfDays,
+                return_date: returnDate,
+            });
+
+            // Clear inputs for the next entry
+            document.getElementById("item_id").value = "";
+            document.getElementById("quantity").value = "";
+            document.getElementById("date_of_issuing").value = "";
+            document.getElementById("number_of_days").value = "";
+            document.getElementById("item-details").textContent = "";
+        }
+
+        // Calculate the return date
+        function calculateReturnDate(date, days) {
+            const issuingDate = new Date(date);
+            issuingDate.setDate(issuingDate.getDate() + parseInt(days));
+            return issuingDate.toISOString().split("T")[0]; // Format as YYYY-MM-DD
+        }
+
+        // Finalize rental and redirect to the bill summary
+        // function finalizeRental() {
+        //     if (selectedItems.length === 0) {
+        //         alert("No items added.");
+        //         return;
+        //     }
+
+        //     fetch("/finalize_rental", {
+        //         method: "POST",
+        //         headers: {
+        //             "Content-Type": "application/json",
+        //         },
+        //         body: JSON.stringify({
+        //             user_id: "{{ user_id }}", // Ensure this is correctly populated
+        //             items: selectedItems,
+        //         }),
+        //     })
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         if (data.success) {
+        //             // Redirect to billing summary for the user
+        //             window.location.href = `/bill_summary/${data.user_id}`;
+        //         } else {
+        //             alert("Error: " + data.error);
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.error("Error finalizing rental:", error);
+        //     });
+        // }
+        function finalizeRental() {
+            console.log("Finalize Rental button clicked"); // Debugging
+
+            if (selectedItems.length === 0) {
+                alert("No items added.");
+                return;
+            }
+
+            var user_id = document.getElementById("user_id").value; // Fetch from hidden input
+            console.log("User ID:", user_id); // Debugging
+
+            fetch("/finalize_rental", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    user_id: user_id,
+                    items: selectedItems,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Response Data:", data); // Debugging
+
+                if (data.success) {
+                    // Redirect to billing summary using rental_id
+                    window.location.href = `/bill_summary/${data.rental_id}`;
+                } else {
+                    alert("Error: " + data.error);
+                }
+            })
+            .catch(error => {
+                console.error("Error finalizing rental:", error);
+            });
+        }
+
+
+    </script>
+</head>
+<body>
+    <h2>Rental Details for User ID: {{ user_id }}</h2>
+
+    <!-- Add Item Section -->
+    <div>
+        <h3>Add Item</h3>
+        <input type="text" id="item_id" placeholder="Enter Item ID" oninput="fetchMaxQuantity()" required>
+        <p id="item-details" style="color: green;"></p>
+        <input type="number" id="quantity" placeholder="Enter Quantity" required>
+        <label>Date of Issuing:</label>
+        <input type="date" id="date_of_issuing" required>
+        <label>Number of Days:</label>
+        <input type="number" id="number_of_days" required>
+        <button type="button" onclick="addItem()">Add Item</button>
+    </div>
+
+    <!-- Selected Items Table -->
+    <h3>Selected Items</h3>
+    <table id="items-table" border="1">
+        <tr>
+            <th>Item ID</th>
+            <th>Quantity</th>
+            <th>Date of Issuing</th>
+            <th>Number of Days</th>
+            <th>Return Date</th>
+        </tr>
+    </table>
+
+    <!-- Finalize Rental Button -->
+    <button onclick="finalizeRental()">Finalize Rental</button>
+</body>
+</html>

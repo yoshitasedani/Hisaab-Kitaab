@@ -262,7 +262,6 @@ def finalize_rental():
             date_of_issuing = datetime.strptime(date_of_issuing, "%Y-%m-%d").date()
             due_date = date_of_issuing + timedelta(days=number_of_days)
 
-            # Check if item exists
             db_item = session.query(Item).filter_by(item_id=item_id).one_or_none()
             if not db_item:
                 return jsonify({"success": False, "error": f"Item {item_id} does not exist"}), 400

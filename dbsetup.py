@@ -65,3 +65,17 @@ columns = inspector.get_columns("rentals")
 for column in columns:
     print(column["name"])
 
+
+from sqlalchemy import text
+from dbsetup import engine
+
+with engine.connect() as connection:
+    result = connection.execute(text("SELECT * FROM items WHERE item_id = 444"))
+    item = result.fetchone()  # Fetch the first row
+
+    if item:
+        print("Item Found:", item)
+    else:
+        print("Item not found")
+
+

@@ -306,7 +306,7 @@ def bill_summary(rental_id):
         if not rental:
             return "No rental found for this ID.", 404
 
-        return render_template("billing_summary.html", rental=rental)
+        return render_template("bill_summary.html", rental=rental)
     except Exception as e:
         return f"An error occurred: {str(e)}", 500
 

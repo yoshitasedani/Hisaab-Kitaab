@@ -301,12 +301,14 @@ def finalize_rental():
 @app.route("/bill_summary/<int:rental_id>")
 def bill_summary(rental_id):
     try:
-        rental = session.query(Rental).filter_by(rental_id=rental_id).first()
+        rental = session.query(Rental).filter_by(rental_id=rental_id).all()  # Fetch as a list
 
         if not rental:
             return "No rental found for this ID.", 404
 
-        return render_template("bill_summary.html", rental=rental)
+        total_rent = sum(r.total_rent for r in rental)  # Calculate total rent
+
+        return render_template("bill_summary.html", rentals=rental, total_rent=total_rent)
     except Exception as e:
         return f"An error occurred: {str(e)}", 500
 
